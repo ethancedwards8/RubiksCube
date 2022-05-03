@@ -28,6 +28,8 @@ public class CenterController : MonoBehaviour
     [SerializeField] LayerMask pieceMask;
     [SerializeField] public SIDE side;
 
+    [SerializeField] float rad;
+
     private GameObject cubeParent;
 
     public static bool IsRotating;
@@ -80,11 +82,21 @@ public class CenterController : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rad);
+    }
+
     public void RotatePiece(SIDE side, bool reverse, bool caps = false, bool twice = false)
     {
-        CubeController.IsRotating = true; // tell the pieces not to rotate
+        CubeController cubeController = GameObject.Find("WholeCube").GetComponent<CubeController>();
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, .75f, pieceMask); // hit all correct pieces
+        GameObject.Find("CubeController").GetComponent<UIController>().timerActive = cubeController.scrambled; // activate the timer when a piece turns
+
+        cubeController.IsRotating = true; // tell the pieces not to rotate
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, rad, pieceMask); // hit all correct pieces
 
         foreach (var hit in hitColliders)
         {
@@ -97,8 +109,8 @@ public class CenterController : MonoBehaviour
         {
             hit.gameObject.transform.SetParent(cubeParent.transform); // reset all correct pieces to child of cube
         }
-        
-        CubeController.IsRotating = false; // tell pieces to rotate
+
+        cubeController.IsRotating = false; // tell pieces to rotate
     }
 
 

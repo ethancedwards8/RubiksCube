@@ -8,21 +8,44 @@ public class CubeController : MonoBehaviour
     [SerializeField] List<CenterController> centers = new List<CenterController>();
 
     Scramble scramble;
-    public static bool IsRotating;
 
-    // Start is called before the first frame update
+    public bool scrambled;
+
+    public bool IsRotating;
+
     void Start()
     {
+        Application.targetFrameRate = 5;
         StartCoroutine(Move());
         scramble = new Scramble(20);
-        Debug.Log(scramble.GetScramble());
+        //Debug.Log(scramble.GetScramble());
         //scramble = new Scramble("R  U  R' U' ");
+
+        Debug.Log(Quaternion.Euler(0, 0, 0));
 
     }
 
-    // Update is called once per frame
     void Update()
     {
+        int solved = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.layer == 6)
+            {
+                if (child.transform.localEulerAngles == new Vector3(0, 0, 0))
+                {
+                    solved++;
+                }
+            }
+        }
+        if (solved == 20)
+        {
+            GameObject.Find("CubeController").GetComponent<UIController>().solved = true;
+        } else
+        {
+            GameObject.Find("CubeController").GetComponent<UIController>().solved = false; 
+
+        }
     }
 
     IEnumerator Move()
@@ -33,27 +56,29 @@ public class CubeController : MonoBehaviour
 
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.S)); // weird hack
 
-            if (true)
+
+            //Debug.Log("pressed");
+
+            var interpret = scramble.InterpretScramble();
+
+            for (int i = 0; i < interpret.sides.Count; i++)
             {
-                //Debug.Log("pressed");
 
-                var interpret = scramble.InterpretScramble();
+                //yield return Utility.wait(.2f);
 
-                for (int i = 0; i < interpret.sides.Count; i++)
-                {
+                //Debug.Log("inter " + i + " side " + interpret.sides[i] + " num " + interpret.measures[i]);
 
-                    yield return Utility.wait(1f);
-
-                    //Debug.Log("inter " + i + " side " + interpret.sides[i] + " num " + interpret.measures[i]);
-
-                    yield return new WaitUntil(() => IsRotating == false);
-                    // https://stackoverflow.com/questions/16177225/find-element-in-list-that-contains-a-value
-                    centers.Find(c => c.side == interpret.sides[i]).RotatePiece(interpret.sides[i], interpret.measures[i] == -90, false, interpret.measures[i] == 180);
-                    yield return new WaitUntil(() => IsRotating == false);
-
-                }
+                yield return new WaitUntil(() => IsRotating == false);
+                Debug.Log(IsRotating);
+                // https://stackoverflow.com/questions/16177225/find-element-in-list-that-contains-a-value
+                centers.Find(c => c.side == interpret.sides[i]).RotatePiece(interpret.sides[i], interpret.measures[i] == -90, false, interpret.measures[i] == 180);
+                Debug.Log(IsRotating);
+                yield return new WaitUntil(() => IsRotating == false);
 
             }
+
+            scrambled = true;
+
         }
     }
 }

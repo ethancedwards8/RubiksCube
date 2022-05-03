@@ -4,12 +4,14 @@ using UnityEngine;
 
 public static class CubeColors
 {
-    public static Color White = new Color(1, 1, 1, 1);
-    public static Color Yellow = new Color(1, 0.92f, 0.016f, 1);
-    public static Color Red = new Color(1, 0, 0, 1);
-    public static Color Orange = new Color(1, 0.64f, 0, 1);
-    public static Color Blue = new Color(0, 0, 1, 1);
-    public static Color Green = new Color(0, 1, 0, 1);
+    // https://www.schemecolor.com/rubik-cube-colors.php
+    // http://answers.unity.com/answers/1243599/view.html
+    public static Color White = new Color32(0xFF, 0xFF, 0xFF, 1); // FFFFFF
+    public static Color Yellow = new Color32(0xFF, 0xD5, 0x00, 1); // FFD500
+    public static Color Red = new Color32(0xB9, 0x00, 0x00, 1); // B90000
+    public static Color Orange = new Color32(0xFF, 0x59, 0x00, 1); // FF5900
+    public static Color Blue = new Color32(0x00, 0x45, 0xAD, 1); // 0045AD
+    public static Color Green = new Color32(0x00, 0x9B, 0x48, 1); // 009B48
 
 }
 
@@ -25,7 +27,6 @@ public class ColorDetector : MonoBehaviour
 
     void Update()
     {
-        
 
         if (Input.GetMouseButtonDown(0))
         {

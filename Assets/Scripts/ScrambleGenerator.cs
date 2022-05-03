@@ -28,7 +28,7 @@ public class Scramble
     public Scramble(int length)
     {
         CreateScramble(length);
-        Debug.Log(this.scramble);
+        //Debug.Log(this.scramble);
         this.finalScramble = GetScramble();
     }
     public Scramble(string scramble)
@@ -37,7 +37,7 @@ public class Scramble
         {
             this.scramble.Add($"{scramble[i]}{scramble[i+1]}");
         }
-        Debug.Log(this.scramble);
+        //Debug.Log(this.scramble);
         this.finalScramble = GetScramble();
     }
 

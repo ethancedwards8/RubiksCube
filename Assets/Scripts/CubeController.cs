@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CubeController : MonoBehaviour
 {
@@ -15,13 +16,11 @@ public class CubeController : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate = 5;
+        Application.targetFrameRate = 60;
         StartCoroutine(Move());
-        scramble = new Scramble(20);
+        scramble = new Scramble(8);
         //Debug.Log(scramble.GetScramble());
         //scramble = new Scramble("R  U  R' U' ");
-
-        Debug.Log(Quaternion.Euler(0, 0, 0));
 
     }
 
@@ -32,13 +31,23 @@ public class CubeController : MonoBehaviour
         {
             if (child.gameObject.layer == 6)
             {
-                if (child.transform.localEulerAngles == new Vector3(0, 0, 0))
+                Vector3 newPos = new Vector3Int((int)Mathf.Round(child.transform.localPosition.x), (int)Mathf.Round(child.transform.localPosition.y), (int)Mathf.Round(child.transform.localPosition.z));
+
+                child.transform.localPosition = newPos;
+                //Debug.Log($"{newPos}");
+
+                if (child.transform.rotation.Equals(Quaternion.Euler(new Vector3(0, 0, 0).normalized).normalized))
                 {
+                    Debug.Log(child.transform.rotation + " " + child.name);
                     solved++;
+                }
+                else
+                {
+                    Debug.Log(child.transform.rotation + " " + child.name + " " + Quaternion.Euler(new Vector3(0, 0, 0)));
                 }
             }
         }
-        if (solved == 20)
+        if (solved >= 20)
         {
             GameObject.Find("CubeController").GetComponent<UIController>().solved = true;
         } else
@@ -69,10 +78,8 @@ public class CubeController : MonoBehaviour
                 //Debug.Log("inter " + i + " side " + interpret.sides[i] + " num " + interpret.measures[i]);
 
                 yield return new WaitUntil(() => IsRotating == false);
-                Debug.Log(IsRotating);
                 // https://stackoverflow.com/questions/16177225/find-element-in-list-that-contains-a-value
                 centers.Find(c => c.side == interpret.sides[i]).RotatePiece(interpret.sides[i], interpret.measures[i] == -90, false, interpret.measures[i] == 180);
-                Debug.Log(IsRotating);
                 yield return new WaitUntil(() => IsRotating == false);
 
             }

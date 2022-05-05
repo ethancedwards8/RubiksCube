@@ -25,8 +25,8 @@ public class PiecePositioner : MonoBehaviour
         }
 
         //Debug.Log($"{centers.Count} and {pieces.Count}");
-        centers.ForEach(f => f.GetComponent<MeshRenderer>().material.color = Color.blue);
-        pieces.ForEach(f => f.GetComponent<MeshRenderer>().material.color = Color.gray);
+        //centers.ForEach(f => f.GetComponent<MeshRenderer>().material.color = Color.blue);
+        //pieces.ForEach(f => f.GetComponent<MeshRenderer>().material.color = Color.gray);
     }
 
     void PositionPieces()

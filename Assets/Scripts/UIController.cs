@@ -11,12 +11,20 @@ public class UIController : MonoBehaviour
 
     [SerializeField] TMP_Text timeText;
     [SerializeField] TMP_Text solveText;
+    [SerializeField] TMP_Text instructionText;
 
     // Start is called before the first frame update
     void Start()
     {
 
         timeText.text = $"Time: {time}";
+        StartCoroutine(Flush());
+    }
+
+    IEnumerator Flush()
+    {
+        yield return Utility.wait(15);
+        UpdateInstructions("Q to quit");
     }
 
     // Update is called once per frame
@@ -25,9 +33,14 @@ public class UIController : MonoBehaviour
         if (timerActive)
         {
             time += Time.deltaTime;
-            timeText.text = $"Time: {time}";
+            timeText.text = $"Time: {time.ToString("N")}";
         }
 
         solveText.text = $"Solved: {solved}";
+    }
+
+    public void UpdateInstructions(string instruction)
+    {
+        instructionText.text = instruction;
     }
 }

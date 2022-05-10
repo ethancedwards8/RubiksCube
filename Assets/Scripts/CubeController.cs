@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class CubeController : MonoBehaviour
 {
@@ -17,8 +19,8 @@ public class CubeController : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        StartCoroutine(Move());
-        scramble = new Scramble(8);
+        StartCoroutine(Scramble());
+        scramble = new Scramble(50);
         //Debug.Log(scramble.GetScramble());
         //scramble = new Scramble("R  U  R' U' ");
 
@@ -26,6 +28,16 @@ public class CubeController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+            Rotate(KeyCode.X, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+        else if (Input.GetKeyDown(KeyCode.Y))
+            Rotate(KeyCode.Y, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+        else if (Input.GetKeyDown(KeyCode.Z))
+            Rotate(KeyCode.Z, Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+
         int solved = 0;
         foreach (Transform child in transform)
         {
@@ -36,14 +48,14 @@ public class CubeController : MonoBehaviour
                 child.transform.localPosition = newPos;
                 //Debug.Log($"{newPos}");
 
-                if (child.transform.rotation.Equals(Quaternion.Euler(new Vector3(0, 0, 0).normalized).normalized))
+                if (child.transform.localRotation.eulerAngles.Equals(/*Quaternion.Euler(*/new Vector3(0, 0, 0).normalized/*).normalized*/))
                 {
-                    Debug.Log(child.transform.rotation + " " + child.name);
+                    //Debug.Log(child.transform.localRotation.eulerAngles + " " + child.name);
                     solved++;
                 }
                 else
                 {
-                    Debug.Log(child.transform.rotation + " " + child.name + " " + Quaternion.Euler(new Vector3(0, 0, 0)));
+                    //Debug.Log(child.transform.localRotation.eulerAngles + " " + child.name + " " + Quaternion.Euler(new Vector3(0, 0, 0)));
                 }
             }
         }
@@ -57,7 +69,27 @@ public class CubeController : MonoBehaviour
         }
     }
 
-    IEnumerator Move()
+    void Rotate(KeyCode key, bool reverse)
+    {
+        int dir = reverse ? -90 : 90;
+
+        switch (key)
+        {
+            case KeyCode.X:
+                transform.Rotate(dir, 0, 0);
+                break;
+
+            case KeyCode.Y:
+                transform.Rotate(0, dir, 0);
+                break;
+
+            case KeyCode.Z:
+                transform.Rotate(0, 0, dir);
+                break;
+        }
+    }
+
+    IEnumerator Scramble()
     {
         while (true)
         {
@@ -85,6 +117,7 @@ public class CubeController : MonoBehaviour
             }
 
             scrambled = true;
+            GameObject.Find("CubeController").GetComponent<UIController>().UpdateInstructions("Use UDBFRL to control sides. Happy solving!");
 
         }
     }

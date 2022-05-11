@@ -4,7 +4,7 @@
 
 /*
  * Generate a sequence of L, R, U, D, F, B moves, such that (a) the same move doesn't occur twice in a row, and (b) there are no sequences such as "U D U" where the same move gets repeated without changing "axis".
- * For each move, add a suffix to specify a random amount of that move. So, for R, we randomly choose between R, R', and R2.
+ * For each move, add a suffix to specify a random amount of that move. So, for R, we randomly choose between R , R', and R2.
  * 
  * 
  * 
@@ -14,8 +14,8 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
+// not dependent on Unity at all. Can be used in external projects!
 public class Scramble
 {
     private List<string> scramble = new List<string>();
@@ -25,6 +25,7 @@ public class Scramble
     private string possibleMoves = "LRUDFB";
     private string possibleModifiers = " '2";
 
+    // function overloading, just with constructors!
     public Scramble(int length)
     {
         CreateScramble(length);
@@ -33,9 +34,9 @@ public class Scramble
     }
     public Scramble(string scramble)
     {
-        for (int i = 0; i < scramble.Length-1; i+=2)
+        for (int i = 0; i < scramble.Length - 1; i += 2)
         {
-            this.scramble.Add($"{scramble[i]}{scramble[i+1]}");
+            this.scramble.Add($"{scramble[i]}{scramble[i + 1]}");
         }
         //Debug.Log(this.scramble);
         this.finalScramble = GetScramble();
@@ -59,7 +60,7 @@ public class Scramble
     {
         string res = "";
 
-        foreach(var scram in scramble)
+        foreach (var scram in scramble)
         {
             res += scram + " ";
         }
@@ -71,7 +72,7 @@ public class Scramble
     {
         (List<SIDE> sides, List<int> measures) res = (new List<SIDE>(), new List<int>());
 
-        foreach(var scram in scramble)
+        foreach (var scram in scramble)
         {
             switch (scram[0])
             {

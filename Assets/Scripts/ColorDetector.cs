@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Basically an enum, but with values.
 public static class CubeColors
 {
     // https://www.schemecolor.com/rubik-cube-colors.php
@@ -15,6 +16,7 @@ public static class CubeColors
 
 }
 
+// Was going to use in order to detect colors on the cube, ended up not doing it this way.
 public class ColorDetector : MonoBehaviour
 {
     private Camera cam;

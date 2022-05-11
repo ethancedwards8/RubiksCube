@@ -5,6 +5,7 @@ using TMPro;
 
 public class UIController : MonoBehaviour
 {
+    // public because I need to access them outside the class
     public float time { get; set; }
     public bool timerActive { get; set; }
     public bool solved { get; set; }
@@ -16,7 +17,6 @@ public class UIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         timeText.text = $"Time: {time}";
         StartCoroutine(Flush());
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Deprecated code, was going to try to fix the jumbling issue by positioning the pieces.
 public class PiecePositioner : MonoBehaviour
 {
     private List<GameObject> pieces = new List<GameObject>(), centers = new List<GameObject>();
@@ -41,6 +42,6 @@ public class PiecePositioner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
+// Change font on click
 public class FontChanger : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] TMP_Text text;

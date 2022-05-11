@@ -1,7 +1,10 @@
+// useful git tip: https://stackoverflow.com/questions/15589682/ssh-connect-to-host-github-com-port-22-connection-timed-out
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Another "enum", in order to keep track of what key I need for what face
 public static class Side
 {
     public static KeyCode UP = KeyCode.U;
@@ -12,6 +15,7 @@ public static class Side
     public static KeyCode DOWN = KeyCode.D;
 }
 
+// setting the side for each center
 public enum SIDE
 {
     UP,
@@ -28,9 +32,9 @@ public class CenterController : MonoBehaviour
     [SerializeField] LayerMask pieceMask;
     [SerializeField] public SIDE side;
 
-    [SerializeField] float rad;
+    [SerializeField] float radius = .75f;
 
-    private GameObject cubeParent;
+    [SerializeField] private GameObject cubeParent;
 
     public static bool IsRotating;
 
@@ -39,9 +43,9 @@ public class CenterController : MonoBehaviour
     void Start()
     {
         IsRotating = false;
-        //pieceMask = LayerMask.NameToLayer("Piece");
-        cubeParent = GameObject.Find("WholeCube");
+        //pieceMask = LayerMask.NameToLayer("Piece"); // didn't work? Not sure why.
 
+        // setting up all the needed things
         switch (side)
         {
             case SIDE.UP:
@@ -72,22 +76,21 @@ public class CenterController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyDown(dataStore.key))
+        if (Input.GetKeyDown(dataStore.key)) // move each side
         {
             RotatePiece(side, dataStore.reverse, (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)));
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()//debugging 
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, rad);
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 
+    // rotate the pieces. The default values are there to reduce code duplication
     public void RotatePiece(SIDE side, bool reverse, bool caps = false, bool twice = false)
     {
         CubeController cubeController = GameObject.Find("WholeCube").GetComponent<CubeController>();
@@ -96,7 +99,7 @@ public class CenterController : MonoBehaviour
 
         cubeController.IsRotating = true; // tell the pieces not to rotate
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, rad, pieceMask); // hit all correct pieces
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, pieceMask); // hit all correct pieces
 
         foreach (var hit in hitColliders)
         {
@@ -113,9 +116,10 @@ public class CenterController : MonoBehaviour
         cubeController.IsRotating = false; // tell pieces to rotate
     }
 
-
+    // Calculate the Rotation
     public static Vector3 CalcRotation(SIDE side, bool reverse, bool twice = false)
     {
+        // half turns are direction agnostic, quarter turns are not.
         int dir = twice ? 180 : reverse ? 90 : -90;
         Vector3 res = new Vector3(0, 0, 0);
 
